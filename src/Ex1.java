@@ -28,6 +28,7 @@ public class Ex1 {
 			ans += c*poly[i];
 		}
 		return ans;
+        /// ///
 	}
 	/** Given a polynomial function (p), a range [x1,x2] and an epsilon eps.
 	 * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
