@@ -56,15 +56,54 @@ public class Ex1 {
 	 * @param yy
 	 * @return an array of doubles representing the coefficients of the polynom.
 	 */
+    /**
+     * if (lx == 2 ){
+     * double x1 =xx [0];
+     * double x2 = xx [1];
+     * double y1 = yy [0];
+     * double y2 = yy [1];
+     * double a =( y1- y2/ x1- x2);
+     * double b = (y1- a );
+     * return ans ;
+     * }
+     * else {
+     *
+     * }
+     */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
 		int lx = xx.length;
 		int ly = yy.length;
 		if(xx!=null && yy!=null && lx==ly && lx>1 && lx<4) {
-		/** add you code below
+             if (lx == 2 ){
+                 double x0 = xx [0];
+                 double x1 = xx [1];
+                 double y0 = yy[0];
+                 double y1 = yy[1];
+                 if (Math.abs(x1 - x0) < 1e-9) return null;
+                 double a1 = ((y1 - y0)/ (x1 - x0));
+                 double a0 = (y1-a1) * x0 ;
+                 return new double[]{a0, a1};
+                 }
+if(lx == 3){
+    double x0 = xx[0], y0 = yy[0];
+    double x1 = xx[1], y1 = yy[1];
+    double x2 = xx[2], y2 = yy[2];
 
-		/////////////////// */
-		}
+    double den = (x0 - x1) * (x1 - x2) * (x2 - x0);
+
+    if (Math.abs(den) < 1e-9) {
+        return null;
+    }
+
+    double a2 = (x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / den;
+    double a1 = ((y1 - y0) / (x1 - x0)) - a2 * (x0 + x1);
+    double a0 = y0 - a1 * x0 - a2 * x0 * x0;
+
+    return new double[]{a0, a1, a2};
+}
+                 }
+
 		return ans;
 	}
 	/** Two polynomials functions are equal if and only if they have the same values f(x) for n+1 values of x,
@@ -200,9 +239,13 @@ public class Ex1 {
 	 */
 	public static double[] derivative (double[] po) {
 		double [] ans = ZERO;//
-        /** add you code below
-
-         /////////////////// */
+        if(po!= null && po.length>1){
+            int len = po.length;
+            ans = new double[len -1];
+            for(int i=0;i<ans.length; i = i +1){
+                ans [i] = po [i+1] * ( i + 1);
+            }
+        }
 		return ans;
 	}
 }
