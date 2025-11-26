@@ -8,7 +8,6 @@
  * This is the main Class you should implement (see "add your code below")
  *
  * @author boaz.benmoshe
-
  */
 public class Ex1 {
 	/** Epsilon value for numerical computation, it serves as a "close enough" threshold. */
@@ -56,19 +55,10 @@ public class Ex1 {
 	 * @param yy
 	 * @return an array of doubles representing the coefficients of the polynom.
 	 */
+
+
     /**
-     * if (lx == 2 ){
-     * double x1 =xx [0];
-     * double x2 = xx [1];
-     * double y1 = yy [0];
-     * double y2 = yy [1];
-     * double a =( y1- y2/ x1- x2);
-     * double b = (y1- a );
-     * return ans ;
-     * }
-     * else {
      *
-     * }
      */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
         double[] ans = null;
@@ -144,16 +134,42 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param poly the polynomial function represented as an array of doubles
 	 * @return String representing the polynomial function:
 	 */
-	public static String poly(double[] poly) {
-		String ans = "";
-		if(poly.length==0) {ans="0";}
-		else {
-            /** add you code below
+    public static String poly(double[] poly) {
+        String ans = "";
+        if (poly.length == 0) {
+            return "0.0";
+        }
+        for (int i = poly.length - 1; i >= 0; i--) {
+            double coeff = poly[i];
+            if (coeff == 0.0) {
+                continue;
+            }
+            if (ans.length() > 0) {
+                if (coeff > 0) {
+                    ans += " + ";
+                } else {
+                    ans += " - ";
+                }
+            } else if (coeff < 0) {
+                ans += "-";
+            }
+            double absCoeff = Math.abs(coeff);
+            if (i > 0 && absCoeff == 1.0) {
+            } else {
+                ans += String.format("%.1f", absCoeff);
+            }
+            if (i == 1) {
+                ans += "x";
+            } else if (i > 1) {
+                ans += "x^" + i;
+            }
+        }
+        if (ans.length() == 0) {
+            return "0.0";
+        }
 
-             /////////////////// */
-		}
-		return ans;
-	}
+        return ans;
+    }
 	/**
 	 * Given two polynomial functions (p1,p2), a range [x1,x2] and an epsilon eps. This function computes an x value (x1<=x<=x2)
 	 * for which |p1(x) -p2(x)| < eps, assuming (p1(x1)-p2(x1)) * (p1(x2)-p2(x2)) <= 0.
