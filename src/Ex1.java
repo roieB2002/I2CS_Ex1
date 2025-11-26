@@ -71,55 +71,73 @@ public class Ex1 {
      * }
      */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
-		double [] ans = null;
-		int lx = xx.length;
-		int ly = yy.length;
-		if(xx!=null && yy!=null && lx==ly && lx>1 && lx<4) {
-             if (lx == 2 ){
-                 double x0 = xx [0];
-                 double x1 = xx [1];
-                 double y0 = yy[0];
-                 double y1 = yy[1];
-                 if (Math.abs(x1 - x0) < 1e-9) return null;
-                 double a1 = ((y1 - y0)/ (x1 - x0));
-                 double a0 = (y1-a1) * x0 ;
-                 return new double[]{a0, a1};
-                 }
-if(lx == 3){
-    double x0 = xx[0], y0 = yy[0];
-    double x1 = xx[1], y1 = yy[1];
-    double x2 = xx[2], y2 = yy[2];
+        double[] ans = null;
+        int lx = xx.length;
+        int ly = yy.length;
+        if (xx != null && yy != null && lx == ly && lx > 1 && lx < 4) {
+            if (lx == 2) {
+                double x0 = xx[0];
+                double x1 = xx[1];
+                double y0 = yy[0];
+                double y1 = yy[1];
+                if (Math.abs(x1 - x0) < 1e-9) return null;
+                double a1 = ((y1 - y0) / (x1 - x0));
+                double a0 = (y1 - a1) * x0;
+                return new double[]{a0, a1};
+            } else {
+                double x0 = xx[0], y0 = yy[0];
+                double x1 = xx[1], y1 = yy[1];
+                double x2 = xx[2], y2 = yy[2];
+                double den = (x0 - x1) * (x1 - x2) * (x2 - x0);
+                if (Math.abs(den) < 1e-9) {
+                    return null;
+                }
+                double a2 = (x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / den;
+                double a1 = ((y1 - y0) / (x1 - x0)) - a2 * (x0 + x1);
+                double a0 = y0 - a1 * x0 - a2 * x0 * x0;
 
-    double den = (x0 - x1) * (x1 - x2) * (x2 - x0);
-
-    if (Math.abs(den) < 1e-9) {
-        return null;
+                return new double[]{a0, a1, a2};
+            }
+        }
+        return ans;
     }
 
-    double a2 = (x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / den;
-    double a1 = ((y1 - y0) / (x1 - x0)) - a2 * (x0 + x1);
-    double a0 = y0 - a1 * x0 - a2 * x0 * x0;
-
-    return new double[]{a0, a1, a2};
-}
-                 }
-
-		return ans;
-	}
+    /**
+     *This is a helper function that finds the real length of the polynomial array by checking for and ignoring any unnecessary zeros at the end.
+     * We start with the full length of the array in a variable called len.
+     * The function runs a check, moving backward from the array's end.
+     * It keeps reducing the value of len as long as two things are true:
+     * len is greater than 1 (which means we aren't looking at the first term,x^0)
+     * and the coefficient it's currently looking at is zero (within the tolerance of EPS)
+     * The process stops as soon as it hits a number that is not zero or when it reaches the constant term.
+     * The final value of len is then the effective length of the polynomial.
+     */
+    public static int getEffectiveLength(double[] p) {
+        int len = p.length;
+        while (len>1 && Math.abs(p[len-1])<EPS){
+            len--;
+        }
+        return len;
+    }
 	/** Two polynomials functions are equal if and only if they have the same values f(x) for n+1 values of x,
 	 * where n is the max degree (over p1, p2) - up to an epsilon (aka EPS) value.
 	 * @param p1 first polynomial function
 	 * @param p2 second polynomial function
 	 * @return true iff p1 represents the same polynomial function as p2.
 	 */
-	public static boolean equals(double[] p1, double[] p2) {
-		boolean ans = true;
-        /** add you code below
-
-         /////////////////// */
-		return ans;
-	}
-
+public static boolean equals (double p1 [], double p2[]){
+    int len1 = getEffectiveLength(p1);
+    int len2 = getEffectiveLength(p2);
+    if (p1 != p2){
+        return false;
+    }
+    for (int i = 0; i<len1; i++){
+        if (Math.abs(p1[i] - p2[i]) >=EPS){
+            return false;
+        }
+    }
+    return true;
+}
 	/** 
 	 * Computes a String representing the polynomial function.
 	 * For example the array {2,0,3.1,-1.2} will be presented as the following String  "-1.2x^3 +3.1x^2 +2.0"
