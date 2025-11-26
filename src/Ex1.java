@@ -27,7 +27,7 @@ public class Ex1 {
 			ans += c*poly[i];
 		}
 		return ans;
-        /// ///
+
 	}
 	/** Given a polynomial function (p), a range [x1,x2] and an epsilon eps.
 	 * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
@@ -56,21 +56,23 @@ public class Ex1 {
 	 * @return an array of doubles representing the coefficients of the polynom.
 	 */
 
-
     /**
      *
      */
+
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
         double[] ans = null;
         int lx = xx.length;
         int ly = yy.length;
         if (xx != null && yy != null && lx == ly && lx > 1 && lx < 4) {
+
             if (lx == 2) {
                 double x0 = xx[0];
                 double x1 = xx[1];
                 double y0 = yy[0];
                 double y1 = yy[1];
-                if (Math.abs(x1 - x0) < 1e-9) return null;
+                // if two point are same
+                if (Math.abs(x1 - x0) == 0) return null;
                 double a1 = ((y1 - y0) / (x1 - x0));
                 double a0 = (y1 - a1) * x0;
                 return new double[]{a0, a1};
@@ -79,14 +81,14 @@ public class Ex1 {
                 double x1 = xx[1], y1 = yy[1];
                 double x2 = xx[2], y2 = yy[2];
                 double den = (x0 - x1) * (x1 - x2) * (x2 - x0);
-                if (Math.abs(den) < 1e-9) {
+                if (Math.abs(den) == 0) {
                     return null;
                 }
-                double a2 = (x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / den;
-                double a1 = ((y1 - y0) / (x1 - x0)) - a2 * (x0 + x1);
-                double a0 = y0 - a1 * x0 - a2 * x0 * x0;
+                double a = (x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / den;
+                double b = ((y1 - y0) / (x1 - x0)) - a * (x0 + x1);
+                double c = y0 - b * x0 - a * x0 * x0;
 
-                return new double[]{a0, a1, a2};
+                return new double[]{c, b, a};
             }
         }
         return ans;
@@ -170,6 +172,7 @@ public static boolean equals (double p1 [], double p2[]){
 
         return ans;
     }
+
 	/**
 	 * Given two polynomial functions (p1,p2), a range [x1,x2] and an epsilon eps. This function computes an x value (x1<=x<=x2)
 	 * for which |p1(x) -p2(x)| < eps, assuming (p1(x1)-p2(x1)) * (p1(x2)-p2(x2)) <= 0.
@@ -182,16 +185,19 @@ public static boolean equals (double p1 [], double p2[]){
 	 */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
 		double ans = x1;
-        /** add you code below
+        ///  checking the assumptions
+        if ((f(p1,x1)-f(p2,x1)) *(f(p1,x2)-f(p2,x2)) <= 0)
+    {
 
-         /////////////////// */
+
+    }
 		return ans;
 	}
 	/**
 	 * Given a polynomial function (p), a range [x1,x2] and an integer with the number (n) of sample points.
-	 * This function computes an approximation of the length of the function between f(x1) and f(x2) 
+	 * This function computes an approximation of the length of the function between f(x1) and f(x2)
 	 * using n inner sample points and computing the segment-path between them.
-	 * assuming x1 < x2. 
+	 * assuming x1 < x2.
 	 * This function should be implemented iteratively (none recursive).
 	 * @param p - the polynomial function
 	 * @param x1 - minimal value of the range
@@ -201,12 +207,13 @@ public static boolean equals (double p1 [], double p2[]){
 	 */
 	public static double length(double[] p, double x1, double x2, int numberOfSegments) {
 		double ans = x1;
-        /** add you code below
+        /**
+         * add you code below
+         */
+         return ans;
 
-         /////////////////// */
-		return ans;
 	}
-	
+
 	/**
 	 * Given two polynomial functions (p1,p2), a range [x1,x2] and an integer representing the number of Trapezoids between the functions (number of samples in on each polynom).
 	 * This function computes an approximation of the area between the polynomial functions within the x-range.
@@ -229,15 +236,16 @@ public static boolean equals (double p1 [], double p2[]){
 	 * This function computes the array representation of a polynomial function from a String
 	 * representation. Note:given a polynomial function represented as a double array,
 	 * getPolynomFromString(poly(p)) should return an array equals to p.
-	 * 
+	 *
 	 * @param p - a String representing polynomial function.
 	 * @return
 	 */
 	public static double[] getPolynomFromString(String p) {
 		double [] ans = ZERO;//  -1.0x^2 +3.0x +2.0
         /** add you code below
-
-         /////////////////// */
+         *
+         *
+         */
 		return ans;
 	}
 	/**
@@ -246,11 +254,37 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param p2
 	 * @return
 	 */
+    /**
+     * In this fanction
+     * @param p1
+     * @param p2
+     * @return
+     */
 	public static double[] add(double[] p1, double[] p2) {
 		double [] ans = ZERO;//
-        /** add you code below
+        int maxLength;
+        if (p1.length >= p2.length){
+            maxLength = p1.length;
+        }
+        else
+            maxLength = p2.length;
+        ans = new double[maxLength];
+        for (int i =0; i<maxLength; i++)
+        {
+          if (i < p1.length && i < p2.length)
+                {
+                    ans[i]= p1[i]+p2[i];
+                }
+          else if (i < p1.length){
+              ans[i] = p1[i];
+          }
+          else{
+              if (i<p2.length)
+              { ans[i] = p2[i];}
+          }
+        }
 
-         /////////////////// */
+
 		return ans;
 	}
 	/**
@@ -260,10 +294,13 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @return
 	 */
 	public static double[] mul(double[] p1, double[] p2) {
-		double [] ans = ZERO;//
-        /** add you code below
+        double [] ans = new double[p1.length + p2.length-1];
+        for (int i = 0; i< p1.length ; i++){
+            for(int j = 0; j< p2.length; j++){
+                ans [i+j]+= p1[i] *p2[i];
+            }
 
-         /////////////////// */
+            }
 		return ans;
 	}
 	/**
