@@ -205,11 +205,29 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param numberOfSegments - (A positive integer value (1,2,...).
 	 * @return the length approximation of the function between f(x1) and f(x2).
 	 */
+    /**
+     * I started the function by defining a 'delta x' variable [assuming you calculated the step size here].
+     * I initialized the current x to be the starting point of the range, which is x1.
+     * Then, I determined the current y based on the current x and the polynomial, using the helper function 'f'.
+     * I used a loop that runs from 0 to the number of segments, incrementing by 1 in each iteration.
+     * Inside the loop, I defined the next x as the current x plus delta x, and calculated the next y using the helper function with the new x value.
+     * Finally, I calculated the distances in x and y and applied the Pythagorean theorem
+      */
 	public static double length(double[] p, double x1, double x2, int numberOfSegments) {
-		double ans = x1;
-        /**
-         * add you code below
-         */
+       double ans = 0.0;
+       double dx = (x2 - x1)/numberOfSegments;
+       double xCurrent = x1;
+       double yCurrent = f(p,xCurrent);
+       for(int i = 0;i<numberOfSegments; i++){
+           double nextX = xCurrent + dx ;
+           double nextY = f(p,nextX);
+            double distX = nextX - xCurrent ;
+            double distY = nextY - yCurrent;
+            double dist= Math.sqrt(distX* distX + distY * distY);
+            ans += dist;
+            xCurrent = nextX;
+            yCurrent = nextY;
+       }
          return ans;
 
 	}
