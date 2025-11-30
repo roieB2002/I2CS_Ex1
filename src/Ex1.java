@@ -57,7 +57,12 @@ public class Ex1 {
 	 */
 
     /**
-     *
+     ** This function finds a polynomial that passes through a set of given points (x, y).
+     * It supports two cases based on the number of points:
+     * If 2 points are given: It calculates a straight line (Linear function: y = ax + b).
+     * It computes the slope and the intercept.
+     * If 3 points are given: It calculates a parabola (Quadratic function: y = ax^2 + bx + c).
+     * It uses geometric formulas to find the coefficients a, b, and c.
      */
 
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
@@ -117,10 +122,17 @@ public class Ex1 {
 	 * @param p2 second polynomial function
 	 * @return true iff p1 represents the same polynomial function as p2.
 	 */
-public static boolean equals (double p1 [], double p2[]){
+
+    /**
+     * This function checks if two polynomials are equal.
+     *  First, I find the effective length of both arrays (ignoring trailing zeros).
+     * If the lengths are different, the polynomials are not equal.
+     * Then, I go over the arrays and check if the difference between the values is smaller than epsilon.
+     */
+    public static boolean equals (double p1 [], double p2[]){
     int len1 = getEffectiveLength(p1);
     int len2 = getEffectiveLength(p2);
-    if (p1 != p2){
+    if (len1 != len2){
         return false;
     }
     for (int i = 0; i<len1; i++){
@@ -136,6 +148,19 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param poly the polynomial function represented as an array of doubles
 	 * @return String representing the polynomial function:
 	 */
+
+    /**
+     * This function converts the polynomial array into a String representation.
+     * It works by going over the array from the highest power to the lowest:
+     * If the array is empty, it returns "0.0".
+     * I loop backwards from the last element to 0.
+     * I skip any coefficient that is 0.
+     * I handle the signs (plus or minus) and format the numbers.
+     * If the coefficient is 1 or -1 (and it's not the free number), I don't print the number itself (just x or x^n).
+     * If the result is empty (all zeros), I return "0.0".
+     * @param poly
+     * @return
+     */
     public static String poly(double[] poly) {
         String ans = "";
         if (poly.length == 0) {
@@ -183,16 +208,35 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
 	 * @return an x value (x1<=x<=x2) for which |p1(x) - p2(x)| < eps.
 	 */
+
+    /**
+     *This function finds the x where p1 and p2 have the same value.
+     * It works by cutting the range [x1, x2] in half again and again.
+     * I calculate the middle point between x1 and x2.
+     * I check the difference between p1 and p2 at the middle.
+     * If the difference is very small (smaller than eps), I return the middle.
+     * If not, I update x1 or x2 to be the middle point to verify the other half.
+     */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
-		double ans = x1;
-        ///  checking the assumptions
-        if ((f(p1,x1)-f(p2,x1)) *(f(p1,x2)-f(p2,x2)) <= 0)
-    {
+        double mid = (x1 + x2) / 2;
 
+        while ((x2 - x1) > eps) {
+            mid = (x1 + x2) / 2;
+            double fx = f(p1,mid) - f(p2,mid);
+            double f1 = f(p1,x1) -f(p2,x1);
 
+            if (Math.abs(fx) < eps) {
+                return mid;
+            }
+
+            if (f1 * fx > 0) {
+                x1 = mid;
+            } else {
+                x2 = mid;
+            }
+        }
+        return mid;
     }
-		return ans;
-	}
 	/**
 	 * Given a polynomial function (p), a range [x1,x2] and an integer with the number (n) of sample points.
 	 * This function computes an approximation of the length of the function between f(x1) and f(x2)
@@ -205,6 +249,7 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param numberOfSegments - (A positive integer value (1,2,...).
 	 * @return the length approximation of the function between f(x1) and f(x2).
 	 */
+
     /**
      * I started the function by defining a 'delta x' variable [assuming you calculated the step size here].
      * I initialized the current x to be the starting point of the range, which is x1.
@@ -243,11 +288,34 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param numberOfTrapezoid - a natural number representing the number of Trapezoids between x1 and x2.
 	 * @return the approximated area between the two polynomial functions within the [x1,x2] range.
 	 */
+
+    /**
+     ** This function calculates the area between two polynomial functions.
+     *  The algorithm works by cutting the area into many small "slices" (Trapezoids) and summing them up:
+     * First, it checks if x1 > x2 and swaps them if needed to ensure correct order.
+     * It calculates the width (dx) of each small slice.
+     * It loops through the range, and for each slice:
+     * Calculates the starting height and ending height (the absolute distance between p1 and p2).
+     * Calculates the area of the trapezoid using the formula: (height1 + height2) / 2 * width.
+     * Finally, it adds up all the small areas to get the total result.
+     */
 	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfTrapezoid) {
 		double ans = 0;
-        /** add you code below
+        if(x1>x2){
+            double temp = x1;
+            x1 = x2;
+            x2 = temp;
+        }
+       double dx = (x2- x1)/numberOfTrapezoid;
+       for (int i = 0 ; i<numberOfTrapezoid;i++){
+           double xCurrent = x1 +i * dx;
+           double xNext = x1 + (i+1) * dx;
+           double heightCurrent = Math.abs(f(p1,xCurrent)-f(p2,xCurrent));
 
-         /////////////////// */
+           double heightNext = Math.abs(f(p1,xNext)-f(p2,xNext));
+           double Trapezoid = (heightNext + heightCurrent)/2 *dx;
+           ans+= Trapezoid;
+       }
 		return ans;
 	}
 	/**
@@ -273,10 +341,11 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @return
 	 */
     /**
-     * In this fanction
-     * @param p1
-     * @param p2
-     * @return
+     * This function computes the polynomial function which is the sum of two polynomial functions (p1, p2).
+     * It creates a new array with the length of the longer polynomial and sums the coefficients index by index.
+     *  p1 is the first polynomial function represented as an array of doubles.
+     *  p2 is the second polynomial function represented as an array of doubles.
+     * return a new array representing the sum of p1 and p2 (i.e., p1(x) + p2(x)).
      */
 	public static double[] add(double[] p1, double[] p2) {
 		double [] ans = ZERO;//
@@ -311,11 +380,18 @@ public static boolean equals (double p1 [], double p2[]){
 	 * @param p2
 	 * @return
 	 */
+    /**
+     * This function multiplies two polynomials (p1 and p2).
+     * It works in 3 simple steps:
+     * Create a new array big enough to hold the result.
+     * Use two loops to go over every number in p1 and every number in p2.
+     * Multiply the numbers and add the result to the correct place in the new array (at index i+j).
+     */
 	public static double[] mul(double[] p1, double[] p2) {
         double [] ans = new double[p1.length + p2.length-1];
         for (int i = 0; i< p1.length ; i++){
             for(int j = 0; j< p2.length; j++){
-                ans [i+j]+= p1[i] *p2[i];
+                ans [i+j]+= p1[i] *p2[j];
             }
 
             }

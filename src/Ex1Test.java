@@ -202,4 +202,36 @@ class Ex1Test {
 		double area = 58.5658;
 		assertEquals(a1,area, Ex1.EPS);
 	}
+
+@Test
+void testPolynomFromPoints() {
+    double[] x1 = {-1, 0, 1};
+    double[] y1 = {1, 0, 1};
+    double[] ans1 = Ex1.PolynomFromPoints(x1, y1);
+    double[] expected1 = {0, 0, 1};
+    assertTrue(Ex1.equals(ans1, expected1));
+    double[] x2 = {0, 1};
+    double[] y2 = {1, 3};
+    double[] ans2 = Ex1.PolynomFromPoints(x2, y2);
+    double[] expected2 = {1, 2};
+    assertTrue(Ex1.equals(ans2, expected2));
+    double[] x3 = {1, 1, 2};
+    double[] y3 = {1, 2, 3};
+    double[] ans3 = Ex1.PolynomFromPoints(x3, y3);
+    assertNull(ans3);
+    }
+@Test
+void testRootFindingAccuracy() {
+    double[] p1 = {0, 0, 1};
+    double[] p2 = {2};
+    double root = Ex1.sameValue(p1, p2, 0, 2, Ex1.EPS);
+    assertEquals(Math.sqrt(2), root, Ex1.EPS);
+}
+@Test
+void testAreaSimple() {
+    double[] p1 = {0, 1};
+    double[] p2 = {0};
+    double areaVal = Ex1.area(p1, p2, 0, 2, 100);
+    assertEquals(2.0, areaVal, 0.01);
+}
 }
